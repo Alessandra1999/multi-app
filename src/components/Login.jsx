@@ -45,6 +45,12 @@ const Button = styled.button`
   }
 `;
 
+const Error = styled.p`
+    color: #E50914;
+    font-size: 0.8em;
+    font-weight: 600;
+`;
+
 // Função para codificar dados em base64
 function base64url(source) {
   // Codifica a string em base64 e remove os caracteres '+' '/' '=' para tornar compatível com URL
@@ -68,28 +74,39 @@ function createJWT(header, payload, secret) {
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState(''); // Define o estado para o nome de usuário
   const [password, setPassword] = useState(''); // Define o estado para a senha
-  const [error, setError] = useState('');
+  const [userError, setUserError] = useState(''); //Define o estado para a mensagem de erro no campo usuário
+  const [passwordError, setPasswordError] = useState(''); //Define o estado para a mensagem de erro no campo senha
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    if (username !== 'admin') {
+      setUserError('Incorrect username.') //Define a mensagem de erro quando o nome de usuário estiver incorreto
+    } else {
+      setUserError(''); //Retira a mensagem de erro quando o nome de usuário estiver correto
+    }
+    if (password !== 'password') {
+      setPasswordError('Incorrect password.') //Define a mensagem de erro quando a senha estiver incorreta
+    } else {
+      setPasswordError(''); //Retira a mensagem de erro quando a senha estiver correta
+    }
+
     if (username === 'admin' && password === 'password') {
+
       const header = { alg: 'HS256', typ: 'JWT' };
       const payload = { username, exp: Math.floor(Date.now() / 1000) + 60 * 60 }; // Expira em 1 hora
-      const secret = 'secret-key'; // Em produção, mantenha isso seguro
+      const secret = 'secret-key'; // Chave genérica, apenas para fins educativos
 
       const token = createJWT(header, payload, secret);
 
       localStorage.setItem('token', token); // Armazena o token no localStorage
       onLogin(); // Chama a função onLogin passada como prop
-    } else {
-      setError('Invalid credentials');
-    }
+    };
   };
 
   return (
     <LoginContainer>
-      <LoginForm onSubmit={handleSubmit}>
+      <LoginForm onSubmit={handleSubmit}> {/* Chama a função handleSubmit quando o botão de tipo 'submit' for clicado */}
         <h2>Login</h2>
         <Input
           type="text"
@@ -97,12 +114,14 @@ const Login = ({ onLogin }) => {
           onChange={(e) => setUsername(e.target.value)} // Atualiza o estado username conforme o usuário digita
           placeholder="Username" // Placeholder do campo de entrada
         />
+        {userError && <Error>{userError}</Error>} {/* Mostra a mensagem de erro quando nome de usuário estiver incorreto */}
         <Input
           type="password"
           value={password} // Valor do campo de entrada é ligado ao estado password
           onChange={(e) => setPassword(e.target.value)} // Atualiza o estado password conforme o usuário digita
           placeholder="Password" // Placeholder do campo de entrada
         />
+        {passwordError && <Error>{passwordError}</Error>} {/* Mostra a mensagem de erro quando a senha estiver incorreta */}
         <Button type="submit">Login</Button> {/* Botão que envia o formulário */}
       </LoginForm>
     </LoginContainer>
