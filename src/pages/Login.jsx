@@ -46,6 +46,7 @@ const Button = styled.button`
   }
 `;
 
+//Estiliza a mensagem de erro
 const Error = styled.p`
     color: #E50914;
     font-size: 0.8em;
