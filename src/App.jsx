@@ -1,25 +1,10 @@
 // Importa hooks e componentes do React e bibliotecas externas.
 import { useState, useEffect } from "react";
-import {
-  Route,
-  Routes,
-  Navigate,
-  useNavigate,
-  useLocation,
-  Link,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Navigate, useNavigate, useLocation, Link } from "react-router-dom";
 import { Carousel } from "react-responsive-carousel";
 import styled from "styled-components";
-import {
-  FaQrcode,
-  FaSearch,
-  FaTasks,
-  FaRegQuestionCircle,
-  FaGlobeAmericas,
-  FaNetworkWired,
-  FaBars,
-  FaArrowLeft,
-} from "react-icons/fa";
+import { FaQrcode, FaSearch, FaTasks, FaRegQuestionCircle, FaGlobeAmericas, FaNetworkWired, FaBars, FaArrowLeft } from "react-icons/fa";
 import QRCodeGenerator from "./components/QRCodeGenarator";
 import IPAddressFinder from "./components/IPAddressFinder";
 import MovieSearchEngine from "./components/MovieSearchEngine";
