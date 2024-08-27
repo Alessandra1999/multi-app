@@ -181,6 +181,21 @@ const TodoApp = () => {
     setEditingTaskText(''); // Limpa o texto da tarefa em edição.
   };
 
+  // Função que cancela a edição de uma tarefa.
+  const cancelEdit = () => {
+    setEditingTaskId(null); // Limpa o id da tarefa em edição.
+    setEditingTaskText(''); // Limpa o texto da tarefa em edição.
+  };
+
+  // Função que salva a tarefa editada.
+  const saveEdit = () => {
+    if (editingTaskText.trim()) { // Verifica se o texto da tarefa não está vazio.
+      updateTask(editingTaskId); // Atualiza a tarefa.
+    } else {
+      cancelEdit(); // Cancela a edição se o texto estiver vazio.
+    }
+  };
+
   // Retorna o JSX que define o layout e comportamento do componente.
   return (
     <Container>
@@ -196,12 +211,15 @@ const TodoApp = () => {
         {tasks.map((task) => (
           <TaskItem key={task.id}>
             {editingTaskId === task.id ? (
-              <EditInput
-                type="text"
-                value={editingTaskText}
-                onChange={(e) => setEditingTaskText(e.target.value)}
-                onBlur={() => updateTask(task.id)}
-              />
+              <>
+                <EditInput
+                  type="text"
+                  value={editingTaskText}
+                  onChange={(e) => setEditingTaskText(e.target.value)}
+                />
+                <button onClick={saveEdit}>Save</button>
+                <button onClick={cancelEdit}>Cancel</button>
+              </>
             ) : (
               <>
                 {task.text}

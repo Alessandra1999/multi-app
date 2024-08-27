@@ -79,37 +79,37 @@ const AppCarousel = ({ carouselIndex, handleAccess, setCarouselIndex }) => {
             <CarouselItem>
               <h2>QR Code Generator</h2>
               <button onClick={() => handleAccess(0, "QRCodeGenerator")}>
-                Acessar
+                Access
               </button>
             </CarouselItem>
             <CarouselItem>
               <h2>IP Address Finder</h2>
               <button onClick={() => handleAccess(1, "IPAddressFinder")}>
-                Acessar
+                Acccess
               </button>
             </CarouselItem>
             <CarouselItem>
               <h2>Movie Search Engine</h2>
               <button onClick={() => handleAccess(2, "MovieSearchEngine")}>
-                Acessar
+                Access
               </button>
             </CarouselItem>
             <CarouselItem>
               <h2>Todo App</h2>
               <button onClick={() => handleAccess(3, "TodoApp")}>
-                Acessar
+                Access
               </button>
             </CarouselItem>
             <CarouselItem>
               <h2>Quiz App</h2>
               <button onClick={() => handleAccess(4, "QuizApp")}>
-                Acessar
+                Access
               </button>
             </CarouselItem>
             <CarouselItem>
               <h2>Language Translator</h2>
               <button onClick={() => handleAccess(5, "LanguageTranslator")}>
-                Acessar
+                Access
               </button>
             </CarouselItem>
           </CustomCarousel>

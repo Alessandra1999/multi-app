@@ -101,10 +101,19 @@ const MovieCard = styled.div`
   }
 `;
 
+// Define o estilo da mensagem de erro
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+`;
+
 // Componente principal MovieSearchEngine
 const MovieSearchEngine = () => {
   const [query, setQuery] = useState(''); // Define o estado para a consulta de busca
   const [movies, setMovies] = useState([]); // Define o estado para armazenar os filmes
+  const [error, setError] = useState(''); // Define o estado para armazenar mensagens de erro
 
   // Função para buscar filmes na API do TMDB
   const searchMovies = async () => {
@@ -112,6 +121,12 @@ const MovieSearchEngine = () => {
       const apiKey = '203dd822d15a1f865449d36d87bcb080'; // Substitua pela sua chave da API do TMDB
       const response = await axios.get(`https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${apiKey}`);
       const movieResults = response.data.results;
+
+      if (movieResults.length === 0) {
+        setError('No movies found.'); // Define a mensagem de erro se nenhum filme for encontrado
+        setMovies([]); // Limpa a lista de filmes
+        return;
+      }
 
       // Obtém os detalhes adicionais de cada filme
       const moviesWithDetails = await Promise.all(
@@ -127,8 +142,10 @@ const MovieSearchEngine = () => {
       );
 
       setMovies(moviesWithDetails); // Armazena os dados dos filmes com detalhes no estado movies
+      setError(''); // Limpa a mensagem de erro
     } catch (error) {
       console.error("Error fetching movie data:", error); // Exibe um erro no console em caso de falha
+      setMovies([]); // Limpa a lista de filmes em caso de erro
     }
   };
 
@@ -142,6 +159,7 @@ const MovieSearchEngine = () => {
         placeholder="Search for a movie" // Placeholder do campo de entrada
       />
       <Button onClick={searchMovies}>Search</Button> {/* Botão que chama a função searchMovies quando clicado */}
+      {error && <ErrorMessage>{error}</ErrorMessage>} {/* Exibe a mensagem de erro se existir */}
       <MoviesContainer>
         {movies && movies.map((movie) => ( // Verifica se há filmes e os mapeia para exibir MovieCard
           <MovieCard key={movie.id}>

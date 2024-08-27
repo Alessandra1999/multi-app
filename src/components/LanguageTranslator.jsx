@@ -92,12 +92,21 @@ const TranslatedText = styled.p`
   text-align: center;
 `;
 
+// Define o estilo da mensagem de erro
+const ErrorMessage = styled.p`
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin-top: 20px;
+`;
+
 // Componente principal LanguageTranslator
 const LanguageTranslator = () => {
   const [text, setText] = useState(''); // Define o estado para o texto a ser traduzido
   const [translatedText, setTranslatedText] = useState(''); // Define o estado para o texto traduzido
   const [sourceLang, setSourceLang] = useState('en'); // Define o estado para a língua de origem
   const [targetLang, setTargetLang] = useState('es'); // Define o estado para a língua de destino
+  const [error, setError] = useState(''); // Define o estado para a mensagem de erro
 
   // Função para traduzir o texto
   const translateText = async () => {
@@ -108,9 +117,15 @@ const LanguageTranslator = () => {
           langpair: `${sourceLang}|${targetLang}`, // Par de línguas para tradução
         },
       });
-      setTranslatedText(response.data.responseData.translatedText); // Armazena o texto traduzido no estado translatedText
+      if (response.data.responseData.translatedText) {
+        setTranslatedText(response.data.responseData.translatedText); // Armazena o texto traduzido no estado translatedText
+        setError(''); // Limpa a mensagem de erro se a tradução for bem-sucedida
+      } else {
+        throw new Error('Translation failed'); // Lança um erro se a tradução falhar
+      }
     } catch (error) {
-      console.error("Error translating text:", error); // Exibe um erro no console em caso de falha
+      setTranslatedText(''); // Limpa o texto traduzido em caso de erro
+      setError('Failed to translate the text. Please try again.'); // Define a mensagem de erro
     }
   };
 
@@ -146,6 +161,7 @@ const LanguageTranslator = () => {
         placeholder="Enter text to translate" // Placeholder do campo de entrada
       />
       <Button onClick={translateText}>Translate</Button> {/* Botão que chama a função translateText quando clicado */}
+      {error && <ErrorMessage>{error}</ErrorMessage>} {/* Exibe a mensagem de erro se houver */}
       {translatedText && <TranslatedText>{translatedText}</TranslatedText>} {/* Condicional que exibe o texto traduzido se translatedText não for vazio */}
     </Container>
   );

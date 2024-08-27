@@ -105,7 +105,7 @@ const App = () => {
                         {currentComponent === "QuizApp" && <QuizApp />}
                         {currentComponent === "LanguageTranslator" && <LanguageTranslator />}
                         <ReturnButton onClick={() => setCurrentComponent(null)}>
-                          Voltar
+                          Return
                         </ReturnButton>
                       </>
                     ) : (
