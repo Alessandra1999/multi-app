@@ -61,6 +61,7 @@ const LogoutButton = styled.button`
     color: white;
     background-color: transparent;
     border: none;
+    cursor: pointer;
 `;
 
 const NavBar = ({ handleAccess, handleLogout }) => {

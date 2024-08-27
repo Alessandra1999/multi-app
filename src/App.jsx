@@ -13,7 +13,7 @@ import QuizApp from "./components/QuizApp";
 import LanguageTranslator from "./components/LanguageTranslator";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import "./App.css";
-import "react-responsive-carousel/lib/styles/carousel.min.css";
+
 
 const AppContainer = styled.div`
   display: flex;

@@ -1,5 +1,6 @@
 import { Carousel } from "react-responsive-carousel";
 import styled from "styled-components";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 // Estiliza o contêiner do carrossel.
 const CarouselContainer = styled.div`
