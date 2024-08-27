@@ -1,7 +1,8 @@
-import NavBar from "./NavBar";
-import Footer from "./Footer";
-import styled from 'styled-components';
+import NavBar from './NavBar'; // Importa o componente NavBar
+import Footer from './Footer'; // Importa o componente Footer
+import styled from 'styled-components'; // Importa a biblioteca styled-components para estilização
 
+// Estilização do contêiner principal do aplicativo
 const AppContainer = styled.div`
   display: flex;
   width: 100%;
@@ -9,6 +10,7 @@ const AppContainer = styled.div`
   background-color: #f0f0f0;
 `;
 
+// Estilização da área de conteúdo principal
 const MainContent = styled.div`
   flex-grow: 1;
   display: flex;
@@ -20,21 +22,24 @@ const MainContent = styled.div`
   overflow: hidden;
 `;
 
+// Componente Layout encapsula a estrutura principal do aplicativo
 const Layout = ({ isAuthenticated, isNavBarOpen, toggleNavBar, handleAccess, handleLogout, children }) => (
-    <AppContainer>
-      {isAuthenticated && (
-        <>
-          <NavBar
-            isOpen={isNavBarOpen}
-            toggleNavBar={toggleNavBar}
-            handleAccess={handleAccess}
-            handleLogout={handleLogout}
-          />
-          <Footer />
-        </>
-      )}
-      <MainContent>{children}</MainContent>
-    </AppContainer>
-  );
-  
-  export default Layout;
+  <AppContainer>
+    {isAuthenticated && (
+      <>
+        {/* Exibe a NavBar e Footer se o usuário estiver autenticado */}
+        <NavBar
+          isOpen={isNavBarOpen}
+          toggleNavBar={toggleNavBar}
+          handleAccess={handleAccess}
+          handleLogout={handleLogout}
+        />
+        <Footer />
+      </>
+    )}
+    {/* Área de conteúdo principal */}
+    <MainContent>{children}</MainContent>
+  </AppContainer>
+);
+
+export default Layout;

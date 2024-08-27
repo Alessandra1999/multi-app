@@ -1,11 +1,12 @@
-import QRCodeGenerator from "../components/QRCodeGenarator";
-import IPAddressFinder from "../components/IPAddressFinder";
-import MovieSearchEngine from "../components/MovieSearchEngine";
-import TodoApp from "../components/TodoApp";
-import QuizApp from "../components/QuizApp";
-import LanguageTranslator from "../components/LanguageTranslator";
-import styled from "styled-components";
+import QRCodeGenerator from "../components/QRCodeGenarator"; // Importa o componente QRCodeGenerator
+import IPAddressFinder from "../components/IPAddressFinder"; // Importa o componente IPAddressFinder
+import MovieSearchEngine from "../components/MovieSearchEngine"; // Importa o componente MovieSearchEngine
+import TodoApp from "../components/TodoApp"; // Importa o componente TodoApp
+import QuizApp from "../components/QuizApp"; // Importa o componente QuizApp
+import LanguageTranslator from "../components/LanguageTranslator"; // Importa o componente LanguageTranslator
+import styled from "styled-components"; // Importa a biblioteca styled-components para estilização
 
+// Estilização do botão de retorno
 const ReturnButton = styled.button`
   padding: 10px 20px;
   background-color: #007bff;
@@ -24,14 +25,17 @@ const ReturnButton = styled.button`
   }
 `;
 
+// Componente ComponentRenderer renderiza diferentes componentes com base em currentComponent
 const ComponentRenderer = ({ currentComponent, onReturn }) => (
   <>
+    {/* Renderiza o componente correspondente a currentComponent */}
     {currentComponent === 'QRCodeGenerator' && <QRCodeGenerator />}
     {currentComponent === 'IPAddressFinder' && <IPAddressFinder />}
     {currentComponent === 'MovieSearchEngine' && <MovieSearchEngine />}
     {currentComponent === 'TodoApp' && <TodoApp />}
     {currentComponent === 'QuizApp' && <QuizApp />}
     {currentComponent === 'LanguageTranslator' && <LanguageTranslator />}
+    {/* Botão de retorno para voltar ao carousel */}
     <ReturnButton onClick={onReturn}>Return</ReturnButton>
   </>
 );
