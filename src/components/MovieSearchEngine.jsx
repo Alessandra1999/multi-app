@@ -115,65 +115,85 @@ const MovieSearchEngine = () => {
   const [movies, setMovies] = useState([]); // Define o estado para armazenar os filmes
   const [error, setError] = useState(''); // Define o estado para armazenar mensagens de erro
 
-  // Função para buscar filmes na API do TMDB
-  const searchMovies = async () => {
-    try {
-      const apiKey = '203dd822d15a1f865449d36d87bcb080'; // Substitua pela sua chave da API do TMDB
-      const response = await axios.get(`https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${apiKey}`);
-      const movieResults = response.data.results;
+ // Função para buscar filmes na API do TMDB
+ const searchMovies = async () => {
+  // Verifica se a consulta não está vazia
+  if (!query.trim()) {
+    setError('Please enter a search query.');
+    return;
+  }
 
-      if (movieResults.length === 0) {
-        setError('No movies found.'); // Define a mensagem de erro se nenhum filme for encontrado
-        setMovies([]); // Limpa a lista de filmes
-        return;
-      }
+  try {
+    const apiKey = '203dd822d15a1f865449d36d87bcb080'; // Chave da API do TMDB
+    // Faz a requisição para buscar filmes com a consulta fornecida
+    const response = await axios.get(`https://api.themoviedb.org/3/search/movie?query=${query}&api_key=${apiKey}`);
+    const movieResults = response.data.results;
 
-      // Obtém os detalhes adicionais de cada filme
-      const moviesWithDetails = await Promise.all(
-        movieResults.map(async (movie) => {
+    // Verifica se a resposta contém filmes
+    if (!Array.isArray(movieResults) || movieResults.length === 0) {
+      setError('No movies found.'); // Mensagem se nenhum filme for encontrado
+      setMovies([]); // Limpa a lista de filmes
+      return;
+    }
+
+    // Busca detalhes adicionais para cada filme
+    const moviesWithDetails = await Promise.all(
+      movieResults.map(async (movie) => {
+        try {
+          // Faz a requisição para obter detalhes do filme
           const detailsResponse = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}?api_key=${apiKey}&append_to_response=credits`);
+          const details = detailsResponse.data;
           return {
             ...movie,
-            runtime: detailsResponse.data.runtime,
-            cast: detailsResponse.data.credits.cast.slice(0, 5), // Obtém os primeiros 5 membros do elenco
-            vote_average: detailsResponse.data.vote_average,
+            runtime: details.runtime || 'Duration is not available.', // Duração do filme 
+            cast: details.credits.cast ? details.credits.cast.slice(0, 5) : [], // Primeiros 5 atores
+            vote_average: details.vote_average || 'Rating is not available.', // Avaliação do filme 
           };
-        })
-      );
+        } catch (detailsError) {
+          console.error("Error fetching movie details:", detailsError); // Log de erro se falhar ao buscar detalhes
+          return movie; // Retorna o filme original em caso de erro ao buscar detalhes
+        }
+      })
+    );
 
-      setMovies(moviesWithDetails); // Armazena os dados dos filmes com detalhes no estado movies
-      setError(''); // Limpa a mensagem de erro
-    } catch (error) {
-      console.error("Error fetching movie data:", error); // Exibe um erro no console em caso de falha
-      setMovies([]); // Limpa a lista de filmes em caso de erro
-    }
-  };
+    setMovies(moviesWithDetails); // Atualiza o estado com os filmes detalhados
+    setError(''); // Limpa a mensagem de erro
+  } catch (error) {
+    console.error("Error fetching movie data:", error); // Log de erro se falhar ao buscar filmes
+    setMovies([]); // Limpa a lista de filmes em caso de erro
+    setError('Failed to fetch movies. Please try again later.'); // Mensagem de erro geral
+  }
+};
 
-  return (
-    <Container>
-      <Title>Movie Search Engine</Title>
-      <Input
-        type="text"
-        value={query} // Valor do campo de entrada é ligado ao estado query
-        onChange={(e) => setQuery(e.target.value)} // Atualiza o estado query conforme o usuário digita
-        placeholder="Search for a movie" // Placeholder do campo de entrada
-      />
-      <Button onClick={searchMovies}>Search</Button> {/* Botão que chama a função searchMovies quando clicado */}
-      {error && <ErrorMessage>{error}</ErrorMessage>} {/* Exibe a mensagem de erro se existir */}
-      <MoviesContainer>
-        {movies && movies.map((movie) => ( // Verifica se há filmes e os mapeia para exibir MovieCard
-          <MovieCard key={movie.id}>
-            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={`${movie.title} Poster`} /> {/* Exibe o pôster do filme */}
-            <h3>{movie.title}</h3> {/* Exibe o título do filme */}
-            <p><strong>Release Date:</strong> {new Date(movie.release_date).toLocaleDateString('pt-BR')}</p> {/* Exibe a data de lançamento do filme */}
-            <p><strong>Duration:</strong> {movie.runtime} minutes</p> {/* Exibe a duração do filme */}
-            <p><strong>Rating:</strong> {movie.vote_average}/10</p> {/* Exibe a avaliação do filme */}
-            <p><strong>Cast:</strong> {movie.cast.map(actor => actor.name).join(', ')}</p> {/* Exibe os principais atores */}
-          </MovieCard>
-        ))}
-      </MoviesContainer>
-    </Container>
-  );
+return (
+  <Container>
+    <Title>Movie Search Engine</Title>
+    <Input
+      type="text"
+      value={query} // Valor do campo de entrada vinculado ao estado query
+      onChange={(e) => setQuery(e.target.value)} // Atualiza o estado query conforme o usuário digita
+      placeholder="Search for a movie" // Texto de sugestão no campo de entrada
+    />
+    <Button onClick={searchMovies}>Search</Button> {/* Botão para iniciar a busca */}
+    {error && <ErrorMessage>{error}</ErrorMessage>} {/* Exibe mensagem de erro, se houver */}
+    <MoviesContainer>
+      {movies.length > 0 && movies.map((movie) => (
+        <MovieCard key={movie.id}>
+          {movie.poster_path ? (
+            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={`${movie.title} Poster`} />
+          ) : (
+            <div>No Poster Available.</div> // Mensagem alternativa se o pôster não estiver disponível
+          )}
+          <h3>{movie.title}</h3> {/* Título do filme */}
+          <p><strong>Release Date:</strong> {movie.release_date ? new Date(movie.release_date).toLocaleDateString('pt-BR') : 'Release Date is not available.'}</p> {/* Data de lançamento */}
+          <p><strong>Duration:</strong> {movie.runtime} minutes</p> {/* Duração do filme */}
+          <p><strong>Rating:</strong> {movie.vote_average}/10</p> {/* Avaliação do filme */}
+          <p><strong>Cast:</strong> {movie.cast.length > 0 ? movie.cast.map(actor => actor.name).join(', ') : 'Cast is not available.'}</p> {/* Atores principais */}
+        </MovieCard>
+      ))}
+    </MoviesContainer>
+  </Container>
+);
 };
 
 export default MovieSearchEngine; // Exporta o componente MovieSearchEngine como padrão

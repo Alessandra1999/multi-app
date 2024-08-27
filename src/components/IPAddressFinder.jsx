@@ -114,10 +114,19 @@ const IPAddressFinder = () => {
       {error && <ErrorMessage>{error}</ErrorMessage>} {/* Exibe a mensagem de erro se existir */}
       {ipData && ( // Condicional que exibe os dados do IP se ipData não for null
         <ResultsContainer>
-          <p><strong>IP:</strong> {ipData.ip}</p>
-          <p><strong>Location:</strong> {ipData.city}, {ipData.region}, {ipData.country}</p>
-          <p><strong>ISP:</strong> {ipData.org}</p>
-        </ResultsContainer>
+        {/* Validação e exibição do IP */}
+        <p><strong>IP:</strong> {ipData.ip ? ipData.ip : 'IP data not available'}</p>
+        
+        {/* Validação e exibição da localização (cidade, região e país) */}
+        <p><strong>Location:</strong> 
+          {ipData.city && ipData.region && ipData.country 
+            ? `${ipData.city}, ${ipData.region}, ${ipData.country}` 
+            : 'Location data not available'}
+        </p>
+        
+        {/* Validação e exibição do ISP (Provedor de Serviço de Internet) */}
+        <p><strong>ISP:</strong> {ipData.org ? ipData.org : 'ISP data not available'}</p>
+      </ResultsContainer>
       )}
     </Container>
   );
