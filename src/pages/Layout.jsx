@@ -1,5 +1,5 @@
-import NavBar from "../components/NavBar";
-import Footer from "../components/Footer";
+import NavBar from "./NavBar";
+import Footer from "./Footer";
 import styled from 'styled-components';
 
 const AppContainer = styled.div`
