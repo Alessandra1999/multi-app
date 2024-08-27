@@ -1,5 +1,7 @@
 ### Multi-app
 
+<h1>Atividade 5 - Melhoria do Código Front-End</h1>
+
 ### Melhorias implementadas:
 
 - Substituição da Api Omdb pela Api Tmdb no componente MovieSearch.
