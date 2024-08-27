@@ -1,23 +1,22 @@
 import { useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import styled from "styled-components";
 import NavBar from "./components/NavBar";
-import AppCarousel from "./components/AppCarousel";
 import Footer from "./components/Footer";
+import Login from "./pages/Login";
+import AppCarousel from "./components/AppCarousel";
 import QRCodeGenerator from "./components/QRCodeGenarator";
 import IPAddressFinder from "./components/IPAddressFinder";
 import MovieSearchEngine from "./components/MovieSearchEngine";
 import TodoApp from "./components/TodoApp";
 import QuizApp from "./components/QuizApp";
 import LanguageTranslator from "./components/LanguageTranslator";
-import Login from "./pages/Login";
 import ProtectedRoute from "./pages/ProtectedRoute";
 import "./App.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const AppContainer = styled.div`
   display: flex;
-  flex-direction: row;
   width: 100%;
   height: 100vh;
   background-color: #f0f0f0;
@@ -57,7 +56,6 @@ const App = () => {
   const [isNavBarOpen, setIsNavBarOpen] = useState(false);
   const [currentComponent, setCurrentComponent] = useState(null);
   const [carouselIndex, setCarouselIndex] = useState(0);
-  const navigate = useNavigate();
 
   const handleAccess = (index, component) => {
     setCurrentComponent(component);
@@ -67,22 +65,34 @@ const App = () => {
   const handleLogout = () => {
     setIsAuthenticated(false);
     setCurrentComponent(null);
-    navigate("/login");
+  };
+
+  const toggleNavBar = () => {
+    setIsNavBarOpen(!isNavBarOpen);
   };
 
   return (
     <Router>
       <AppContainer>
-        <NavBar
-          isOpen={isNavBarOpen}
-          handleAccess={handleAccess}
-          handleLogout={handleLogout}
-        />
+        {isAuthenticated && (
+          <>
+            <NavBar
+              isOpen={isNavBarOpen}
+              handleAccess={handleAccess}
+              handleLogout={handleLogout}
+              toggleNavBar={toggleNavBar}
+            />
+            <Footer />
+          </>
+        )}
         <MainContent>
           <Routes>
-            <Route path="/login" element={<Login onLogin={() => setIsAuthenticated(true)} />} />
+            {/* Rota para login */}
+            <Route path="/" element={!isAuthenticated ? <Login onLogin={() => setIsAuthenticated(true)} /> : <Navigate to="/content" />} />
+
+            {/* Rota protegida */}
             <Route
-              path="/"
+              path="/content"
               element={
                 <ProtectedRoute isAuthenticated={isAuthenticated}>
                   <>
@@ -109,9 +119,11 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
+            {/* Redirecionamento para login se não autenticado */}
+            <Route path="*" element={<Navigate to={isAuthenticated ? "/content" : "/"} />} />
           </Routes>
         </MainContent>
-        <Footer />
       </AppContainer>
     </Router>
   );
