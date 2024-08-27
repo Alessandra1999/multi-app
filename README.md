@@ -8,5 +8,6 @@
 - Implementação de mensagens de erro claras e amigáveis para o usuário.
 - Separação em pastas para melhor organização.
 - Implementação de mais componentes para o App.jsx ficar mais limpo.
+- Implementação de mais perguntas no QuizApp.
 - Implementação de um botão "Play Again" no QuizApp para permitir que o usuário possa jogar novamente com mais facilidade.
 - Implementação de botões "Save" e "Cancel" ao editar uma tarefa no ToDo App.
