@@ -23,7 +23,7 @@
 - Se você ainda não tem o Git instalado na sua máquina, faça o download e instale-o (https://git-scm.com/downloads).
 
 ### 2. Clonar o Repositório
-- Obter o link do repositório: No GitHub, vá até o repositório que você deseja clonar. Clique no botão verde "Code" e copie o link do repositório (geralmente termina em .git).
+- Obter o link do repositório: No GitHub, vá até o repositório que você deseja clonar. Clique no botão verde (ou azul) "Code" e copie o link do repositório (geralmente termina em .git).
 - Abrir o terminal: No seu sistema operacional, abra o terminal (ou Git Bash no Windows).
 - Clonar o repositório: No terminal, navegue até o diretório onde você quer clonar o projeto e execute o seguinte comando: git clone "link-do-repositorio" (Substitua "link-do-repositorio" pelo link que você copiou.)
 
