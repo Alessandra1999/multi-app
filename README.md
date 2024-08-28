@@ -15,6 +15,8 @@
 - Implementação de botões "Save" e "Cancel" ao editar uma tarefa no ToDo App.
 - Validação de dados JSON retornando mensagens de erro caso algum dado não seja encontrado.
 
+<hr/>
+
 - <h1>Como executar o projeto localmente: </h1>
 
 ### 1. Instalar o Git
